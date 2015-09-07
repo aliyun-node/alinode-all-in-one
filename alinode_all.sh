@@ -80,7 +80,7 @@ git clone https://github.com/ali-sdk/commands.git $command_dir
 echo 'now config your agentx\n'
 echo '您可以通过下述方式获取您的应用Id和应用Token:\n'
 echo '如果是第一次使用'
-echo '打开 http://agent.aliyun.com/'
+echo '打开 http://alinode.aliyun.com/'
 echo '通过阿里云账号登陆'
 echo '点击用户名'
 echo '添加应用->输入您的应用名->下一步'
@@ -105,7 +105,7 @@ touch $config
 > $config
 
 echo   { >> $config
-echo   \"server\":            \"121.43.224.20:8080\", >> $config
+echo   \"server\":            \"127.0.0.1:8080\", >> $config
 echo   \"appid\":             \"$appId\", >> $config
 echo   \"secret\":            \"$appToken\", >> $config
 echo   \"cmddir\":            \"$command_dir\", >> $config

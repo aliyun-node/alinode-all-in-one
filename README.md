@@ -24,7 +24,7 @@ This script will help you install all needed step by step.
  - 1. install tnvm.
  - 2. install alinode, node or iojs with tnvm. You may specify a certain version during  installation.
  - 3. install agentx, this may take a while.
- - 4. install alinodescripts to your specified directory.
+ - 4. install alinode scripts to your specified directory.
  - 5. create a configuration to start agentx. appid and app token must be provided.
 
 ### More
@@ -52,7 +52,7 @@ Then you may install manually as following:
 
 ```
 {
-  "server": "121.43.224.20:8080",
+  "server": "127.0.0.1:8080",
   "appid": "your_app_id",
   "secret": "your_app_token",
   "cmddir": "/path/for/these/scripts",
@@ -73,7 +73,7 @@ Then you may install manually as following:
 
  - 您可以通过下述方式获取您的应用Id和应用Token:
  - 如果是第一次使用
- - 打开 http://agent.aliyun.com/
+ - 打开 http://alinode.aliyun.com
  - 通过阿里云账号登陆
  - 点击用户名
  - 添加应用->输入您的应用名->下一步
