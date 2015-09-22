@@ -8,7 +8,7 @@ one-script installs alinode solution
 Download script to current directory:
 
 ```
-wget -q https://raw.githubusercontent.com/ali-sdk/alinode-all-in-one/master/alinode_all.sh
+wget -q https://raw.githubusercontent.com/aliyun-node/alinode-all-in-one/master/alinode_all.sh
 ```
 
 如果遇到 ssl 证书问题， 尝试wget加上选项 `--no-check-certificate`
@@ -34,7 +34,7 @@ Then you may install manually as following:
 
  - 1. install tnvm
 ```
-  wget -qO- https://raw.githubusercontent.com/ali-sdk/tnvm/master/install.sh | bash
+  wget -qO- https://raw.githubusercontent.com/aliyun-node/tnvm/master/install.sh | bash
 ```
  - 2. install alinode with tnvm
 ```
@@ -46,7 +46,7 @@ Then you may install manually as following:
 ```
  - 4. install alinodescripts
 ```
-  git clone https://github.com/ali-sdk/commands.git /path/for/these/scripts
+  git clone https://github.com/aliyun-node/commands.git /path/for/these/scripts
 ```
  - 5. create a configuration(`/path/to/config/yourconfig.json`) with the following format:
 

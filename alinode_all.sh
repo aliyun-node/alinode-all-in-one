@@ -30,10 +30,10 @@ read is_aliyun_ecs
 
 if [ "$is_aliyun_ecs" = y -o "$is_aliyun_ecs" = Y -o "$is_aliyun_ecs" = '' ]
 then
-  METHOD=script wget --no-check-certificate https://raw.githubusercontent.com/ali-sdk/tnvm/master/install.sh
+  METHOD=script wget --no-check-certificate https://raw.githubusercontent.com/aliyun-node/tnvm/master/install.sh
 else
   echo 'You may try aliyun ECS to benefit from ......'
-  wget  https://raw.githubusercontent.com/ali-sdk/tnvm/master/install.sh --no-check-certificate
+  wget  https://raw.githubusercontent.com/aliyun-node/tnvm/master/install.sh --no-check-certificate
 fi
 
 # bashrc的问题,需要先把这两个删掉
@@ -75,7 +75,7 @@ echo '\nInstall command scripts...'
 default_cmd_dir=`echo ~/`.alinodescripts
 command_dir=`_read_user_enter "scripts directory"  $default_cmd_dir  "provide directory for scripts"`
 mkdir -p $command_dir
-git clone https://github.com/ali-sdk/commands.git $command_dir
+git clone https://github.com/aliyun-node/commands.git $command_dir
 
 echo 'now config your agentx\n'
 echo '您可以通过下述方式获取您的应用Id和应用Token:\n'
