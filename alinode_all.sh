@@ -2,7 +2,7 @@
 
 if [[ $- == *i* ]];
 then
-  alias echo='echo -e'
+  echo ''
 else
   echo 'Usage:'
   echo '  bash -i alinode_all.sh'
@@ -12,27 +12,27 @@ fi
 #参数名称 默认值 参数说明
 _read_user_enter() {
   echo $3  >&2
-  echo Please enter $1 [Press enter to accept default: $2] >&2
+  echo 请输入 $1 [按回车接受默认值: $2] >&2
 
-  read usrVar
-  if [ "$usrVar" =  "" ]; then
-    var=$2
+  read USR_ENTER
+  if [ "$USR_ENTER" =  "" ]; then
+    VAR=$2
   else
-    var=$usrVar
+    VAR=$USR_ENTER
   fi
-  echo "$1 is set as: $var"  >&2
-  echo $var
+  echo "$1 设置为: $VAR"  >&2
+  echo $VAR
 }
 
-echo '\nInstalling tnvm...'
-echo "\nAre you using ECS from aliyun (y/n)?"
-read is_aliyun_ecs
-
-if [ "$is_aliyun_ecs" = y -o "$is_aliyun_ecs" = Y -o "$is_aliyun_ecs" = '' ]
-then
+echo '安装 tnvm...'
+echo ''
+echo "您的服务器来自阿里云ECS (y/n)?"
+read IS_ECS
+if [ "$IS_ECS" = y -o "$IS_ECS" = Y -o "$IS_ECS" = '' ]; then
   METHOD=script wget --no-check-certificate https://raw.githubusercontent.com/aliyun-node/tnvm/master/install.sh
 else
-  echo 'You may try aliyun ECS to benefit from ......'
+  echo '您可以试用阿里云ECS以便享受更快的安装速度哦......'
+  echo ''
   wget  https://raw.githubusercontent.com/aliyun-node/tnvm/master/install.sh --no-check-certificate
 fi
 
@@ -45,82 +45,107 @@ chmod a+x ./install.sh
 
 source ~/.bashrc
 
-install_package=`_read_user_enter 'package you want to install' alinode 'select from: alinode/node/iojs'`
-echo '\nplease select from the following list for: ' $install_package
-choices=`tnvm ls-remote $install_package`
-for choice in $choices
+PACKAGE=`_read_user_enter '需要安装的二进制包 可选项: alinode/node/iojs' alinode ''`
+echo ''
+
+echo '您的选择:' $PACKAGE
+
+echo '请选择具体版本:'
+CHOICES=`tnvm ls-remote $PACKAGE`
+for CHOICE in $CHOICES
 do
-  echo $choice
-  default_choice=$choice
+  echo $CHOICE
+  DEFAULT_PACKAGE=$CHOICE
 done
 
 # 去掉颜色信息
-default_choice=`echo $default_choice|sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"`
+DEFAULT_PACKAGE=`echo $DEFAULT_PACKAGE|sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"`
 
-to_install=`_read_user_enter "$install_package version" $default_choice "enter $install_package with version" `
-tnvm install $to_install
-tnvm use $to_install
+INSTALL_PACKAGE=`_read_user_enter "$PACKAGE 具体版本" $DEFAULT_PACKAGE "" `
+tnvm install $INSTALL_PACKAGE
+tnvm use $INSTALL_PACKAGE
 
-if [ "$install_package" = "alinode" ];
-  then
-  echo alinode version: `node -p "process.alinode"` and corresponding node version: `node -v`
+if [ "$PACKAGE" = "alinode" ]; then
+  echo alinode 版本: `node -p "process.alinode"` 对应的node版本: `node -v`
 else
-  echo $install_package version `node -v`
+  echo $PACKAGE 版本: `node -v`
 fi
 
-echo '\nInstalling agentx...'
+echo ''
+echo '安装 agentx...'
 npm -g install agentx
 
-echo '\nInstall command scripts...'
-default_cmd_dir=`echo ~/`.alinodescripts
-command_dir=`_read_user_enter "scripts directory"  $default_cmd_dir  "provide directory for scripts"`
-mkdir -p $command_dir
-git clone https://github.com/aliyun-node/commands.git $command_dir
+echo ''
+echo '安装 命令集...'
+DEFAULT_COMMAND_DIR=`echo ~/`.alinodescripts
+COMMAND_DIR=`_read_user_enter "命令集目录"  $DEFAULT_COMMAND_DIR  ""`
+mkdir -p $COMMAND_DIR
 
-echo 'now config your agentx\n'
-echo '您可以通过下述方式获取您的应用Id和应用Token:\n'
+if [ -d "$DEFAULT_COMMAND_DIR/.git" ]; then
+  cd $DEFAULT_COMMAND_DIR && (command git pull 2> /dev/null || {
+  echo '   请在'$DEFAULT_COMMAND_DIR'目录下运行命令: git pull 更新到最新命令集'
+  })
+  cd - 2> /dev/null
+else
+  echo 'git clone https://github.com/aliyun-node/commands.git' $COMMAND_DIR
+  git clone https://github.com/aliyun-node/commands.git $COMMAND_DIR
+fi
+
+echo ''
+echo '配置agentx...'
+echo ''
+echo '您可以通过下述方式获取您的应用Id和应用Token:'
+echo ''
 echo '如果是第一次使用'
 echo '打开 http://alinode.aliyun.com/'
 echo '通过阿里云账号登陆'
 echo '点击用户名'
 echo '添加应用->输入您的应用名->下一步'
-echo '获得 应用Id 和 应用Token\n'
-echo '如果您已有应用id和Token'
+echo '获得 应用Id 和 应用Token'
+echo ''
+echo '如果您已有应用Id和Token'
 echo '登陆后点击应用名->右侧应用设置'
-echo '获得 应用Id 和 应用Token\n'
+echo '获得 应用Id 和 应用Token'
+echo ''
 echo '请输入应用ID'
-read appId
-echo '您的应用Id: ' $appId '\n'
+read APP_ID
+echo '您的应用Id: ' $APP_ID
+echo ''
 echo '请输入应用Token'
-read appToken
-echo '您的应用Token: ' $appToken '\n'
+read APP_TOKEN
+echo '您的应用Token: ' $APP_TOKEN
+echo ''
 
-log_dir=`_read_user_enter "alinode log directory" "/tmp/" "输入alinode log文件夹\n***必须与启动应用时的环境变量NODE_LOG_DIR相同***"`
+echo '设置alinode log目录...'
+echo ''
+echo '注意: ***必须与启动应用时的环境变量NODE_LOG_DIR相同***'
+LOG_DIR=`_read_user_enter "alinode log 目录" "/tmp/" ""`
 
-default_config_dir=`pwd`
-config_dir=`_read_user_enter "config.json directory" $default_config_dir "输入配置文件夹"`
-config=$config_dir'/yourconfig.json'
-echo 'ddddddd' $config
-touch $config
-> $config
+DEFAULT_CFG_DIR=`pwd`
+CFG_DIR=`_read_user_enter "配置文件目录" $DEFAULT_CFG_DIR  ""`
+CFG_PATH=$CFG_DIR'/yourconfig.json'
+touch $CFG_PATH
+> $CFG_PATH
 
-echo   { >> $config
-echo   \"server\":            \"127.0.0.1:8080\", >> $config
-echo   \"appid\":             \"$appId\", >> $config
-echo   \"secret\":            \"$appToken\", >> $config
-echo   \"cmddir\":            \"$command_dir\", >> $config
-echo   \"logdir\":            \"$log_dir\", >> $config
-echo   \"reconnectDelay\":    10, >> $config
-echo   \"heartbeatInterval\": 60, >> $config
-echo   \"reportInterval\":    60 >> $config
-echo   } >> $config
+echo   { >> $CFG_PATH
+echo   "  "\"server\":            \"120.55.151.247\", >> $CFG_PATH
+echo   "  "\"appid\":             \"$APP_ID\", >> $CFG_PATH
+echo   "  "\"secret\":            \"$APP_TOKEN\", >> $CFG_PATH
+echo   "  "\"cmddir\":            \"$COMMAND_DIR\", >> $CFG_PATH
+echo   "  "\"logdir\":            \"$LOG_DIR\", >> $CFG_PATH
+echo   "  "\"reconnectDelay\":    10, >> $CFG_PATH
+echo   "  "\"heartbeatInterval\": 60, >> $CFG_PATH
+echo   "  "\"reportInterval\":    60 >> $CFG_PATH
+echo   } >> $CFG_PATH
 
 echo
-echo 您的配置如下,您可以手工修改$config来改变配置
-cat $config
+echo 您的配置如下,您可以手工修改$CFG_PATH来改变配置
+cat $CFG_PATH
 
-echo '\nCongratulations~~~\n'
-echo start agentx via: nohup agentx $config &
-echo
+echo ''
+echo '通过下面命令启动agentx, 快乐享受alinode服务':
+echo ''
+echo '    nohup agentx' $CFG_PATH '&'
+echo ''
 
 exec bash
