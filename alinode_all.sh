@@ -128,7 +128,7 @@ touch $CFG_PATH
 > $CFG_PATH
 
 echo   { >> $CFG_PATH
-echo   "  "\"server\":            \"120.55.151.247\", >> $CFG_PATH
+echo   "  "\"server\":            \"120.55.151.247:8080\", >> $CFG_PATH
 echo   "  "\"appid\":             \"$APP_ID\", >> $CFG_PATH
 echo   "  "\"secret\":            \"$APP_TOKEN\", >> $CFG_PATH
 echo   "  "\"cmddir\":            \"$COMMAND_DIR\", >> $CFG_PATH
