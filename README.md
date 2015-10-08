@@ -38,7 +38,7 @@ Then you may install manually as following:
 ```
  - 2. install alinode with tnvm
 ```
-  tnvm install alinode-v0.12.7
+  tnvm install alinode-v4.1.0
 ```
  - 3. install agentx
 ```
@@ -52,7 +52,7 @@ Then you may install manually as following:
 
 ```
 {
-  "server": "127.0.0.1:8080",
+  "server": "120.55.151.247:8080",
   "appid": "your_app_id",
   "secret": "your_app_token",
   "cmddir": "/path/for/these/scripts",
@@ -81,7 +81,7 @@ Then you may install manually as following:
  - 如果您已有应用id和Token
  - 登陆后点击应用名->右侧应用设置
  - 获得 应用Id 和 应用Token
-
+ - 应用Id是一个数字，应用Token是一个字符串
 
 ## License
 
