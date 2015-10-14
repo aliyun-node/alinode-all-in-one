@@ -100,7 +100,8 @@ alinode_install_alinode() {
   echo
   echo '您的选择:' $PACKAGE
   echo '请选择具体版本:'
-  CHOICES=`tnvm ls-remote $PACKAGE`
+  CHOICES=`tnvm lookup|awk '{print $6 "--基于node-" $9}'`
+  echo
   for CHOICE in $CHOICES
     do
       echo $CHOICE
@@ -108,9 +109,9 @@ alinode_install_alinode() {
   done
 
   # 去掉颜色信息
-  DEFAULT_PACKAGE=`echo $DEFAULT_PACKAGE|sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"`
+  DEFAULT_PACKAGE=`echo $DEFAULT_PACKAGE|sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"|awk -F "--" '{print $1}'`
 
-  INSTALL_PACKAGE=`alinode_read_para "$PACKAGE 具体版本" $DEFAULT_PACKAGE "" `
+  INSTALL_PACKAGE=`alinode_read_para "$PACKAGE 具体版本(例如alinode-v1.0.0)" $DEFAULT_PACKAGE "" `
   tnvm install $INSTALL_PACKAGE
   tnvm use $INSTALL_PACKAGE
 
@@ -121,10 +122,22 @@ alinode_install_alinode() {
   fi
 }
 
+alinode_install_cnpm() {
+  if ! alinode_has "cnpm"; then
+    echo
+    echo "安装 cnpm以实现npm加速..."
+    npm install -g cnpm --registry=http://registry.npm.taobao.org
+  fi
+}
+
 alinode_install_agentx() {
   echo
   echo '安装 agentx...'
-  npm -g install agentx
+  if alinode_has "cnpm"; then
+    cnpm -g install agentx
+  else
+    npm -g install agentx
+  fi
 }
 
 alinode_install_commands() {
@@ -226,6 +239,7 @@ alinode_post_install() {
 alinode_pre_install
 alinode_install_tnvm
 alinode_install_alinode
+alinode_install_cnpm
 alinode_install_agentx
 alinode_install_commands
 alinode_configure_agentx
