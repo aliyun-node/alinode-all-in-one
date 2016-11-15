@@ -63,6 +63,19 @@ alinode_read_para() {
   echo $VAR
 }
 
+alinode_read_array_para() {
+  read args
+  para=""
+  for a in $args
+    do fa="\"$a\", "
+      para="$para$fa"
+  done
+  para=`echo ${para::-2}`
+
+  para=[$para]
+  echo $para
+}
+
 alinode_install_tnvm() {
   echo '安装 tnvm...'
   echo
@@ -170,12 +183,19 @@ alinode_install_commands() {
     cd -
     rm -rf $TMP_CMD_DIR
   fi
+
+  cd $COMMAND_DIR
+  echo
+  if alinode_has "cnpm"; then
+    cnpm install
+  else
+    npm install
+  fi
+  cd -
 }
 
-alinode_configure_agentx() {
-  echo
-  echo '配置agentx...'
-  echo
+
+config_hint_id_token() {
   echo '您可以通过下述方式获取您的应用Id和应用Token:'
   echo
   echo '如果是第一次使用'
@@ -188,6 +208,36 @@ alinode_configure_agentx() {
   echo '如果您已有应用Id和Token'
   echo '登陆后点击应用名->右侧应用设置'
   echo '获得 应用Id 和 应用Token'
+}
+
+config_hint_logdir() {
+  echo '设置alinode log目录...'
+  echo
+  echo -e '\e[31m注意: ***必须与启动应用时的环境变量NODE_LOG_DIR相同***\e[0m'
+  echo -e '\e[31m      ***若不设置NODE_LOG_DIR,那么使用 /tmp/ 目录  ***\e[0m'
+}
+
+config_hint_error_log() {
+  echo '请输入error_log目录'
+  echo -e '\e[31merror_log是您的应用自己输出的日志，带有stack信息\e[0m'
+  echo -e '\e[31m格式: /path/to/your/error_log/error.#YYYY-#MM-#DD.log\e[0m'
+  echo -e '\e[31m多于1个error_log，以空格分隔\e[0m'
+  echo -e '\e[31m不要此项功能，回车跳过\e[0m'
+}
+
+config_hint_packages() {
+  echo '请输入dependency目录'
+  echo -e '\e[31mdependency是您的应用依赖包信息\e[0m'
+  echo -e '\e[31m格式: /path/to/your/error_log/yourdep.json\e[0m'
+  echo -e '\e[31m多于1个，以空格分隔\e[0m'
+  echo -e '\e[31m不要此项功能，回车跳过\e[0m'
+}
+
+alinode_configure_agentx() {
+  echo
+  echo '配置agentx...'
+  echo
+  config_hint_id_token
   echo
   echo '请输入应用ID'
   read APP_ID
@@ -198,11 +248,14 @@ alinode_configure_agentx() {
   echo '您的应用Token: ' $APP_TOKEN
   echo
 
-  echo '设置alinode log目录...'
-  echo
-  echo '注意: ***必须与启动应用时的环境变量NODE_LOG_DIR相同***'
-  echo '      ***若不设置NODE_LOG_DIR,那么使用 /tmp/ 目录  ***'
+  config_hint_logdir
   LOG_DIR=`alinode_read_para "alinode log 目录" "/tmp/" ""`
+
+  config_hint_error_log
+  err=`alinode_read_array_para`
+
+  config_hint_packages
+  dep=`alinode_read_array_para`
 
   DEFAULT_CFG_DIR=`pwd`
   CFG_DIR=`alinode_read_para "配置文件目录" $DEFAULT_CFG_DIR  ""`
@@ -218,7 +271,9 @@ alinode_configure_agentx() {
   echo   "  "\"logdir\":            \"$LOG_DIR\", >> $CFG_PATH
   echo   "  "\"reconnectDelay\":    10, >> $CFG_PATH
   echo   "  "\"heartbeatInterval\": 60, >> $CFG_PATH
-  echo   "  "\"reportInterval\":    60 >> $CFG_PATH
+  echo   "  "\"reportInterval\":    60, >> $CFG_PATH
+  echo   "  "\"error_log\":         $err, >>$CFG_PATH
+  echo   "  "\"packages\":          $dep >>$CFG_PATH
   echo   } >> $CFG_PATH
 
   echo
