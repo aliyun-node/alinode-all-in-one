@@ -42,7 +42,7 @@ alinode_pre_install() {
   elif alinode_has "wget"; then
     echo
   else
-    echo >&2 "安装过程需要git, 或wget"
+    echo >&2 "请安装命令 git, wget, unzip, 然后重新执行 bash -i alinode_all.sh "
     echo
     exit 1
   fi
@@ -173,15 +173,22 @@ alinode_install_commands() {
       rm -rf $TMP_CMD_DIR
     fi
   else
-    TMP_CMD_DIR=`alinode_temp_dir`
-    mkdir -p $TMP_CMD_DIR
-    CMDS_SOURCE="https://github.com/aliyun-node/commands/archive/master.zip"
-    alinode_download -s "$CMDS_SOURCE" -o  "$TMP_CMD_DIR/master.zip"
-    cd $TMP_CMD_DIR
-    unzip master.zip
-    mv commands-master/* $COMMAND_DIR
-    cd -
-    rm -rf $TMP_CMD_DIR
+    if alinode_has unzip; then
+      TMP_CMD_DIR=`alinode_temp_dir`
+      mkdir -p $TMP_CMD_DIR
+      CMDS_SOURCE="https://github.com/aliyun-node/commands/archive/master.zip"
+      alinode_download -s "$CMDS_SOURCE" -o  "$TMP_CMD_DIR/master.zip"
+      cd $TMP_CMD_DIR
+      unzip master.zip
+      mv commands-master/* $COMMAND_DIR
+      cd -
+      rm -rf $TMP_CMD_DIR
+    else
+      echo ''
+      echo -e '\e[31m 请安装 unzip 命令后重新执行 bash -i alinode_all.sh \e[0m'
+      echo ''
+      exit
+    fi
   fi
 
   cd $COMMAND_DIR
