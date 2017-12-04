@@ -65,15 +65,19 @@ alinode_read_para() {
 
 alinode_read_array_para() {
   read args
-  para=""
-  for a in $args
-    do fa="\"$a\", "
-      para="$para$fa"
-  done
-  para=`echo ${para::-2}`
+  if [ -z "$args" ]; then
+    echo []
+  else
+    para=""
+    for a in $args
+      do fa="\"$a\", "
+        para="$para$fa"
+    done
+    para=`echo ${para::-2}`
 
-  para=[$para]
-  echo $para
+    para=[$para]
+    echo $para
+  fi
 }
 
 alinode_install_tnvm() {
@@ -271,7 +275,7 @@ alinode_configure_agentx() {
   > $CFG_PATH
 
   echo   { >> $CFG_PATH
-  echo   "  "\"server\":            \"120.55.151.247:8080\", >> $CFG_PATH
+  echo   "  "\"server\":            \"agentserver.node.aliyun.com:8080\", >> $CFG_PATH
   echo   "  "\"appid\":             \"$APP_ID\", >> $CFG_PATH
   echo   "  "\"secret\":            \"$APP_TOKEN\", >> $CFG_PATH
   echo   "  "\"cmddir\":            \"$COMMAND_DIR\", >> $CFG_PATH
