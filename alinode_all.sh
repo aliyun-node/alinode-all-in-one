@@ -147,70 +147,21 @@ alinode_install_cnpm() {
   fi
 }
 
-alinode_install_agentx() {
+alinode_install_agenthub() {
   echo
-  echo '安装 agentx...'
+  echo '安装 agenthub...'
   if alinode_has "cnpm"; then
-    cnpm -g install agentx
+    cnpm install @alicloud/agenthub -g
   else
-    npm -g install agentx
+    npm install @alicloud/agenthub -g
   fi
 }
-
-alinode_install_commands() {
-  echo
-  echo '安装 命令集...'
-  DEFAULT_COMMAND_DIR=`echo ~/`.alinodescripts
-  COMMAND_DIR=`alinode_read_para "命令集目录"  $DEFAULT_COMMAND_DIR  ""`
-  mkdir -p $COMMAND_DIR
-
-  if alinode_has $GIT; then
-    if [ -d "$COMMAND_DIR/.git" ]; then
-      cd $COMMAND_DIR && (command git pull 2> /dev/null || {
-      echo '   请在'$COMMAND_DIR'目录下运行命令: git pull 更新到最新命令集'
-      })
-      cd - 2> /dev/null
-    else
-      TMP_CMD_DIR=`alinode_temp_dir`
-      git clone https://github.com/aliyun-node/commands.git $TMP_CMD_DIR
-      mv -f $TMP_CMD_DIR/* $COMMAND_DIR
-      rm -rf $TMP_CMD_DIR
-    fi
-  else
-    if alinode_has unzip; then
-      TMP_CMD_DIR=`alinode_temp_dir`
-      mkdir -p $TMP_CMD_DIR
-      CMDS_SOURCE="https://github.com/aliyun-node/commands/archive/master.zip"
-      alinode_download -s "$CMDS_SOURCE" -o  "$TMP_CMD_DIR/master.zip"
-      cd $TMP_CMD_DIR
-      unzip master.zip
-      mv commands-master/* $COMMAND_DIR
-      cd -
-      rm -rf $TMP_CMD_DIR
-    else
-      echo ''
-      echo -e '\e[31m 请安装 unzip 命令后重新执行 bash -i alinode_all.sh \e[0m'
-      echo ''
-      exit
-    fi
-  fi
-
-  cd $COMMAND_DIR
-  echo
-  if alinode_has "cnpm"; then
-    cnpm install
-  else
-    npm install
-  fi
-  cd -
-}
-
 
 config_hint_id_token() {
   echo '您可以通过下述方式获取您的应用Id和应用Token:'
   echo
   echo '如果是第一次使用'
-  echo '打开 http://alinode.aliyun.com/'
+  echo '打开 https://node.console.aliyun.com/'
   echo '通过阿里云账号登陆'
   echo '点击用户名'
   echo '添加应用->输入您的应用名->下一步'
@@ -244,9 +195,9 @@ config_hint_packages() {
   echo -e '\e[31m不要此项功能，回车跳过\e[0m'
 }
 
-alinode_configure_agentx() {
+alinode_configure_agenthub() {
   echo
-  echo '配置agentx...'
+  echo '配置agenthub...'
   echo
   config_hint_id_token
   echo
@@ -278,7 +229,6 @@ alinode_configure_agentx() {
   echo   "  "\"server\":            \"agentserver.node.aliyun.com:8080\", >> $CFG_PATH
   echo   "  "\"appid\":             \"$APP_ID\", >> $CFG_PATH
   echo   "  "\"secret\":            \"$APP_TOKEN\", >> $CFG_PATH
-  echo   "  "\"cmddir\":            \"$COMMAND_DIR\", >> $CFG_PATH
   echo   "  "\"logdir\":            \"$LOG_DIR\", >> $CFG_PATH
   echo   "  "\"reconnectDelay\":    10, >> $CFG_PATH
   echo   "  "\"heartbeatInterval\": 60, >> $CFG_PATH
@@ -294,9 +244,9 @@ alinode_configure_agentx() {
 
 alinode_post_install() {
   echo
-  echo '通过下面命令启动agentx, 快乐享受alinode服务':
+  echo '通过下面命令启动agenthub, 快乐享受alinode服务':
   echo
-  echo '    nohup agentx' $CFG_PATH '&'
+  echo '    nohup agenthub' $CFG_PATH '&'
   echo
   exec bash
 }
@@ -306,7 +256,6 @@ alinode_pre_install
 alinode_install_tnvm
 alinode_install_alinode
 alinode_install_cnpm
-alinode_install_agentx
-alinode_install_commands
-alinode_configure_agentx
+alinode_install_agenthub
+alinode_configure_agenthub
 alinode_post_install
