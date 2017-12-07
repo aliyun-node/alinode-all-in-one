@@ -1,7 +1,7 @@
 
 ## alinode-all-in-one
 ---
-one-script installs alinode solution
+one-script installs Node.js Performance Platform solution
 
 ## Installation
 
@@ -23,9 +23,8 @@ This script will help you install all needed step by step.
 
  - 1. install tnvm.
  - 2. install alinode, node or iojs with tnvm. You may specify a certain version during  installation.
- - 3. install agentx, this may take a while.
- - 4. install alinode scripts to your specified directory.
- - 5. create a configuration to start agentx. appid and app token must be provided.
+ - 3. install agenthub, this may take a while.
+ - 5. create a configuration to start agenthub. appid and app token must be provided.
 
 ### More
 As the network performance and different authority configuration, this script may not work as expected.
@@ -38,24 +37,19 @@ Then you may install manually as following:
 ```
  - 2. install alinode with tnvm
 ```
-  tnvm install alinode-v4.1.0
+  tnvm install alinode-v3.8.0
 ```
- - 3. install agentx
+ - 3. install agenthub
 ```
-  npm -g install agentx
+npm install @alicloud/agenthub -g
 ```
- - 4. install alinodescripts
-```
-  git clone https://github.com/aliyun-node/commands.git /path/for/these/scripts
-```
- - 5. create a configuration(`/path/to/config/yourconfig.json`) with the following format:
+ - 4. create a configuration(`/path/to/config/yourconfig.json`) with the following format:
 
 ```
 {
   "server": "120.55.151.247:8080",
   "appid": "your_app_id",
   "secret": "your_app_token",
-  "cmddir": "/path/for/these/scripts",
   "logdir": "/nodelog/directory",
   "reconnectDelay": 10,
   "heartbeatInterval": 60,
@@ -73,7 +67,7 @@ Then you may install manually as following:
 
  - 您可以通过下述方式获取您的应用Id和应用Token:
  - 如果是第一次使用
- - 打开 http://alinode.aliyun.com
+ - 打开 https://node.console.aliyun.com
  - 通过阿里云账号登陆
  - 点击用户名
  - 添加应用->输入您的应用名->下一步
