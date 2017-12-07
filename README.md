@@ -57,13 +57,18 @@ npm install @alicloud/agenthub -g
 }
 ```
 
-6. start agentx: nohup agentx /path/to/config/yourconfig.json &
+5. start agenthub:
+
+```sh
+$ nohup agenthub /path/to/config/yourconfig.json &
+``
 
 ### Note
 - You may modify your configuration later.
 - logdir: 必须与启动应用时的环境变量 NODE_LOG_DIR 相同，如果没有配置那么请使用 /tmp/ 或删除
 
 ### How to get app id and app token/secret.
+
 您可以通过下述方式获取您的应用 Id 和应用 Token:
 
 - 如果是第一次使用
