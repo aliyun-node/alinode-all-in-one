@@ -61,9 +61,10 @@ npm install @alicloud/agenthub -g
 
 ```sh
 $ nohup agenthub /path/to/config/yourconfig.json &
-``
+```
 
 ### Note
+
 - You may modify your configuration later.
 - logdir: 必须与启动应用时的环境变量 NODE_LOG_DIR 相同，如果没有配置那么请使用 /tmp/ 或删除
 
