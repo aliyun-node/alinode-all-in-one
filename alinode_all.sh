@@ -222,6 +222,9 @@ alinode_configure_agenthub() {
   DEFAULT_CFG_DIR=`pwd`
   CFG_DIR=`alinode_read_para "配置文件目录" $DEFAULT_CFG_DIR  ""`
   CFG_PATH=$CFG_DIR'/yourconfig.json'
+  if [ ! -d "$CFG_DIR" ]; then
+    mkdir -p $CFG_DIR
+  fi
   touch $CFG_PATH
   > $CFG_PATH
 
