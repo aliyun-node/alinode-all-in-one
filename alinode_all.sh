@@ -117,7 +117,8 @@ alinode_install_alinode() {
   echo
   echo '您的选择:' $PACKAGE
   echo '请选择具体版本:'
-  CHOICES=`tnvm lookup|awk '{print $6 "--基于node-" $9}'`
+  # CHOICES=`tnvm lookup|awk '{print $6 "--基于node-" $9}'`
+  CHOICES=`tnvm lookup|awk '{print $6 "--" $9}' | awk -F '-v|--' '{print $2 " " $3 }'|sort -t. -k 1,1n -k 2,2n | awk '{print "alinode-v"$1 "--基于node-" $2}'`
   echo
   for CHOICE in $CHOICES
     do
